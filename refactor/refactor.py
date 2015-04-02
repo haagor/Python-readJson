@@ -9,13 +9,14 @@
 import json
 import sys
 
+line = 1
+
 def handleLand(dico):
-    print(dico["data"]["action"] , file=out_file, end="(")
+    print(line, dico["data"]["action"] , file=out_file, end="(")
     print("people =" + str(dico["data"]["parameters"]["people"]) + ")" , file=out_file)
 
-
 def handleGlimpse_Explorer(dico):
-    print(dico["data"]["action"] , file=out_file, end="(")
+    print(line, dico["data"]["action"] , file=out_file, end="(")
     print(str(dico["data"]["parameters"]["range"]) + "," + dico["data"]["parameters"]["direction"] + ")" , file=out_file, end=" => ")
 
 def handleGlimpse_Engine(dico):
@@ -25,33 +26,33 @@ def handleGlimpse_Engine(dico):
 		while j < len(dico["data"]["extras"]["report"][i]):
 			print(str(dico["data"]["extras"]["report"][i][j][0]) + "(" + str(dico["data"]["extras"]["report"][i][j][1]) + ")", file=out_file, end=",")
 			j = j + 1
-		print(" | ", end="")
+		print(" | " ,file=out_file, end="")
 		i = i + 1
-	print("-)")
+	print("-)" ,file=out_file)
 
 
 def handleExplore_Explorer(dico):
-    print(dico["data"]["action"] , file=out_file, end="(")
+    print(line, dico["data"]["action"] , file=out_file, end="(")
 
 def handleExplore_Engine(dico):
 	i = 0
 	while i < len(dico["data"]["extras"]["resources"]):
 		print(dico["data"]["extras"]["resources"][i]["resource"] + "(" + dico["data"]["extras"]["resources"][i]["amount"] + ")",file=out_file, end=",")
 		i = i + 1
-	print("-)")
+	print("-)" ,file=out_file)
 
 
 def handleMove_to(dico):
-    print(dico["data"]["action"] , file=out_file, end="(")
+    print(line, dico["data"]["action"] , file=out_file, end="(")
     print(dico["data"]["parameters"]["direction"] + ")" , file=out_file)
 
 def handleExploit(dico):
-    print(dico["data"]["action"] , file=out_file, end="(")
+    print(line, dico["data"]["action"] , file=out_file, end="(")
     print(dico["data"]["parameters"]["resource"] + ")" , file=out_file)
 
 
 def handleScout_Explorer(dico):
-    print(dico["data"]["action"] , file=out_file, end="(")
+    print(line, dico["data"]["action"] , file=out_file, end="(")
     print(dico["data"]["parameters"]["direction"] + ")" , file=out_file, end=" => ")
 
 def handleScout_Engine(dico):
@@ -59,14 +60,14 @@ def handleScout_Engine(dico):
 	while i < len(dico["data"]["extras"]["resources"]):
 		print(dico["data"]["extras"]["resources"][i] ,file=out_file, end=",")
 		i = i + 1
-	print("-)")
+	print("-)" ,file=out_file)
 
 
 
 # main --------------------------
 in_file = open(sys.argv[1], "r")
-out_file = sys.stdout
-#out_file = open(sys.argv[2], "w")
+#out_file = sys.stdout
+out_file = open(sys.argv[2], "w")
 
 json_dict = json.load(in_file)
 
@@ -76,21 +77,28 @@ for info in json_dict:
 		#action : LAND
 		if info["data"]["action"] == "land":
 			handleLand(info)
+			line = line + 1
 		#action : GLIMPSE
 		if info["data"]["action"] == "glimpse":
 			handleGlimpse_Explorer(info)
+			line = line + 1
 		#action : EXPLORE
 		if info["data"]["action"] == "explore":
 			handleExplore_Explorer(info)
+			line = line + 1
 		#action : MOVE_TO
 		if info["data"]["action"] == "move_to":
 			handleMove_to(info)
+			line = line + 1
 		#action : EXPLOIT
 		if info["data"]["action"] == "exploit":
 			handleExploit(info)
+			line = line + 1
 		#action : SCOUT
 		if info["data"]["action"] == "scout":
 			handleScout_Explorer(info)
+			line = line + 1
+
 
 	# part: EXPLORE_ENGINE
 	if ("data" in info and "extras" in info["data"] and "resources" in info["data"]["extras"] and not("altitude" in info["data"]["extras"])):
