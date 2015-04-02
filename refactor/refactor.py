@@ -13,9 +13,21 @@ def handleLand(dico):
     print(dico["data"]["action"] , file=out_file, end="(")
     print("people =" + str(dico["data"]["parameters"]["people"]) + ")" , file=out_file)
 
-def handleGlimpse(dico):
+
+def handleGlimpse_Explorer(dico):
     print(dico["data"]["action"] , file=out_file, end="(")
-    print(str(dico["data"]["parameters"]["range"]) + "," + dico["data"]["parameters"]["direction"] + ")" , file=out_file)
+    print(str(dico["data"]["parameters"]["range"]) + "," + dico["data"]["parameters"]["direction"] + ")" , file=out_file, end=" => ")
+
+def handleGlimpse_Engine(dico):
+	i = 0
+	while i < len(dico["data"]["extras"]["report"]):
+		j = 0
+		while j < len(dico["data"]["extras"]["report"][i]):
+			print(str(dico["data"]["extras"]["report"][i][j][0]) + "(" + str(dico["data"]["extras"]["report"][i][j][1]) + ")", file=out_file, end=",")
+			j = j + 1
+		print(" | ", end="")
+		i = i + 1
+	print("-)")
 
 
 def handleExplore_Explorer(dico):
@@ -37,9 +49,18 @@ def handleExploit(dico):
     print(dico["data"]["action"] , file=out_file, end="(")
     print(dico["data"]["parameters"]["resource"] + ")" , file=out_file)
 
-def handleScout(dico):
+
+def handleScout_Explorer(dico):
     print(dico["data"]["action"] , file=out_file, end="(")
-    print(dico["data"]["parameters"]["direction"] + ")" , file=out_file)
+    print(dico["data"]["parameters"]["direction"] + ")" , file=out_file, end=" => ")
+
+def handleScout_Engine(dico):
+	i = 0
+	while i < len(dico["data"]["extras"]["resources"]):
+		print(dico["data"]["extras"]["resources"][i] ,file=out_file, end=",")
+		i = i + 1
+	print("-)")
+
 
 
 # main --------------------------
@@ -57,7 +78,7 @@ for info in json_dict:
 			handleLand(info)
 		#action : GLIMPSE
 		if info["data"]["action"] == "glimpse":
-			handleGlimpse(info)
+			handleGlimpse_Explorer(info)
 		#action : EXPLORE
 		if info["data"]["action"] == "explore":
 			handleExplore_Explorer(info)
@@ -69,12 +90,15 @@ for info in json_dict:
 			handleExploit(info)
 		#action : SCOUT
 		if info["data"]["action"] == "scout":
-			handleScout(info)
+			handleScout_Explorer(info)
 
-	# part: ENGINE
-	if ("data" in info and "extras" in info["data"] and "resources" in info["data"]["extras"]):
-		#action : EXPLORE
-		#if info["data"]["action"] == "explore":
+	# part: EXPLORE_ENGINE
+	if ("data" in info and "extras" in info["data"] and "resources" in info["data"]["extras"] and not("altitude" in info["data"]["extras"])):
 		handleExplore_Engine(info)
-
+	# part: SCOUT_ENGINE
+	if ("data" in info and "extras" in info["data"] and "resources" in info["data"]["extras"] and "altitude" in info["data"]["extras"]):
+		handleScout_Engine(info)
+	# part: GLIMPSE_ENGINE
+	if ("data" in info and "extras" in info["data"] and "report" in info["data"]["extras"]):
+		handleGlimpse_Engine(info)
 
