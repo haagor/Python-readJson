@@ -13,7 +13,7 @@ line = 1
 
 def handleLand(dico):
     print(line, dico["data"]["action"] , file=out_file, end="(")
-    print("people =" + str(dico["data"]["parameters"]["people"]) + ")" , file=out_file)
+    print("people=" + str(dico["data"]["parameters"]["people"]) + ")" , file=out_file)
 
 def handleGlimpse_Explorer(dico):
     print(line, dico["data"]["action"] , file=out_file, end="(")
@@ -24,11 +24,14 @@ def handleGlimpse_Engine(dico):
 	while i < len(dico["data"]["extras"]["report"]):
 		j = 0
 		while j < len(dico["data"]["extras"]["report"][i]):
-			print(str(dico["data"]["extras"]["report"][i][j][0]) + "(" + str(dico["data"]["extras"]["report"][i][j][1]) + ")", file=out_file, end=",")
+			if (type(dico["data"]["extras"]["report"][i][j]) is list):
+				print(str(dico["data"]["extras"]["report"][i][j][0]) + "(" + str(dico["data"]["extras"]["report"][i][j][1]) + ")", file=out_file, end=",")
+			else:
+				print(str(dico["data"]["extras"]["report"][i][j]), file=out_file, end=",")
 			j = j + 1
 		print(" | " ,file=out_file, end="")
 		i = i + 1
-	print("-)" ,file=out_file)
+	print(file=out_file)
 
 
 def handleExplore_Explorer(dico):
