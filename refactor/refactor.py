@@ -49,10 +49,13 @@ def handleMove_to(dico):
     print(line, dico["data"]["action"] , file=out_file, end="(")
     print(dico["data"]["parameters"]["direction"] + ")" , file=out_file)
 
-def handleExploit(dico):
+def handleExploit_Explorer(dico):
     print(line, dico["data"]["action"] , file=out_file, end="(")
-    print(dico["data"]["parameters"]["resource"] + ")" , file=out_file)
+    print(dico["data"]["parameters"]["resource"] + ")" , file=out_file, end=" => ")
 
+def handleExploit_Engine(dico):
+	print(dico["data"]["extras"]["amount"], file=out_file, end=",")
+	print(file=out_file)
 
 def handleScout_Explorer(dico):
     print(line, dico["data"]["action"] , file=out_file, end="(")
@@ -63,7 +66,7 @@ def handleScout_Engine(dico):
 	while i < len(dico["data"]["extras"]["resources"]):
 		print(dico["data"]["extras"]["resources"][i] ,file=out_file, end=",")
 		i = i + 1
-	print("-)" ,file=out_file)
+	print(file=out_file)
 
 
 
@@ -95,7 +98,7 @@ for info in json_dict:
 			line = line + 1
 		#action : EXPLOIT
 		if info["data"]["action"] == "exploit":
-			handleExploit(info)
+			handleExploit_Explorer(info)
 			line = line + 1
 		#action : SCOUT
 		if info["data"]["action"] == "scout":
@@ -109,6 +112,9 @@ for info in json_dict:
 	# part: SCOUT_ENGINE
 	if ("data" in info and "extras" in info["data"] and "resources" in info["data"]["extras"] and "altitude" in info["data"]["extras"]):
 		handleScout_Engine(info)
+	# part: EXPLOIT_ENGINE
+	if ("data" in info and "extras" in info["data"] and "amount" in info["data"]["extras"]):
+		handleExploit_Engine(info)
 	# part: GLIMPSE_ENGINE
 	if ("data" in info and "extras" in info["data"] and "report" in info["data"]["extras"]):
 		handleGlimpse_Engine(info)
