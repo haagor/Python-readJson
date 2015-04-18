@@ -14,7 +14,7 @@ exploitRess = ""
 
 def handleLand(dico):
     print(line, dico["data"]["action"] , file=out_file, end="(")
-    print("people=" + str(dico["data"]["parameters"]["people"]) + ")" , file=out_file)
+    print("people =" + str(dico["data"]["parameters"]["people"]) + ")" , file=out_file)
 
 def handleGlimpse_Explorer(dico):
     print(line, dico["data"]["action"] , file=out_file, end="(")
@@ -25,14 +25,11 @@ def handleGlimpse_Engine(dico):
 	while i < len(dico["data"]["extras"]["report"]):
 		j = 0
 		while j < len(dico["data"]["extras"]["report"][i]):
-			if (type(dico["data"]["extras"]["report"][i][j]) is list):
-				print(str(dico["data"]["extras"]["report"][i][j][0]) + "(" + str(dico["data"]["extras"]["report"][i][j][1]) + ")", file=out_file, end=",")
-			else:
-				print(str(dico["data"]["extras"]["report"][i][j]), file=out_file, end=",")
+			print(str(dico["data"]["extras"]["report"][i][j][0]) + "(" + str(dico["data"]["extras"]["report"][i][j][1]) + ")", file=out_file, end=",")
 			j = j + 1
 		print(" | " ,file=out_file, end="")
 		i = i + 1
-	print(file=out_file)
+	print("-)" ,file=out_file)
 
 
 def handleExplore_Explorer(dico):
@@ -50,13 +47,11 @@ def handleMove_to(dico):
     print(line, dico["data"]["action"] , file=out_file, end="(")
     print(dico["data"]["parameters"]["direction"] + ")" , file=out_file)
 
+
 def handleExploit_Explorer(dico):
     print(line, dico["data"]["action"] , file=out_file, end="(")
-    print(dico["data"]["parameters"]["resource"] + ")" , file=out_file, end=" => ")
+    print(dico["data"]["parameters"]["resource"] + ")" , file=out_file)
 
-def handleExploit_Engine(dico):
-	print(dico["data"]["extras"]["amount"], file=out_file, end=",")
-	print(file=out_file)
 
 def handleExploit_Engine(dico):
 	if exploitRess == resource[0] :
@@ -85,7 +80,7 @@ def handleScout_Engine(dico):
 	while i < len(dico["data"]["extras"]["resources"]):
 		print(dico["data"]["extras"]["resources"][i] ,file=out_file, end=",")
 		i = i + 1
-	print(file=out_file)
+	print("-)" ,file=out_file)
 
 
 resource = [0]*5
@@ -165,9 +160,6 @@ for info in json_dict:
 	# part: SCOUT_ENGINE
 	if ("data" in info and "extras" in info["data"] and "resources" in info["data"]["extras"] and "altitude" in info["data"]["extras"]):
 		handleScout_Engine(info)
-	# part: EXPLOIT_ENGINE
-	if ("data" in info and "extras" in info["data"] and "amount" in info["data"]["extras"]):
-		handleExploit_Engine(info)
 	# part: GLIMPSE_ENGINE
 	if ("data" in info and "extras" in info["data"] and "report" in info["data"]["extras"]):
 		handleGlimpse_Engine(info)
