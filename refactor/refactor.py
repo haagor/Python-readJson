@@ -80,7 +80,7 @@ def handleScout_Engine(dico):
 	while i < len(dico["data"]["extras"]["resources"]):
 		print(dico["data"]["extras"]["resources"][i] ,file=out_file, end=",")
 		i = i + 1
-	print("-)" ,file=out_file)
+	print(dico["data"]["extras"]["altitude"], "-)" ,file=out_file)
 
 
 resource = [0]*5
