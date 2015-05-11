@@ -11,6 +11,7 @@ import sys
 
 line = 1
 exploitRess = ""
+transformRess = ""
 
 def handleLand(dico):
     print(line, dico["data"]["action"] , file=out_file, end="(")
@@ -69,6 +70,28 @@ def handleExploit_Engine(dico):
 	elif exploitRess == resource[4] :
 		global av5
 		avancement[4] = avancement[4] + dico["data"]["extras"]["amount"]
+
+def handleTransform_Explorer(dico):
+    print(line, dico["data"]["action"] , file=out_file, end="(")
+    print(dico["data"]["parameters"], ")" , file=out_file)
+
+def handleTransform_Engine(dico):
+	transformRess = dico["data"]["extras"]["kind"]
+	if transformRess == resource[0] :
+		global av1
+		avancement[0] = avancement[0] + dico["data"]["extras"]["production"]
+	elif transformRess == resource[1] :
+		global av2
+		avancement[1] = avancement[1] + dico["data"]["extras"]["production"]
+	elif transformRess == resource[2] :
+		global av3
+		avancement[2] = avancement[2] + dico["data"]["extras"]["production"]
+	elif transformRess == resource[3] :
+		global av4
+		avancement[3] = avancement[3] + dico["data"]["extras"]["production"]
+	elif transformRess == resource[4] :
+		global av5
+		avancement[4] = avancement[4] + dico["data"]["extras"]["production"]
 
 
 def handleScout_Explorer(dico):
@@ -149,7 +172,10 @@ for info in json_dict:
 		if info["data"]["action"] == "scout":
 			handleScout_Explorer(info)
 			line = line + 1
-
+		#action : TRANSFORM
+		if info["data"]["action"] == "transform":
+			handleTransform_Explorer(info)
+			line = line + 1
 
 	# part: EXPLORE_EXPLOIT
 	if ("data" in info and "extras" in info["data"] and "amount" in info["data"]["extras"]):
@@ -163,6 +189,9 @@ for info in json_dict:
 	# part: GLIMPSE_ENGINE
 	if ("data" in info and "extras" in info["data"] and "report" in info["data"]["extras"]):
 		handleGlimpse_Engine(info)
+	# part: TRANSFORM_ENGINE
+	if ("data" in info and "extras" in info["data"] and "production" in info["data"]["extras"]):
+		handleTransform_Engine(info)
 
-print(resource[0], avancement[0], "/", objectif[1], "---", resource[1], avancement[1], "/", objectif[1], "---", resource[2], avancement[2], "/", objectif[2], "---", resource[3], avancement[3], "/", objectif[3], "---", resource[4], avancement[4], "/", objectif[4], "---", file=out_file)
+print(resource[0], avancement[0], "/", objectif[0], "---", resource[1], avancement[1], "/", objectif[1], "---", resource[2], avancement[2], "/", objectif[2], "---", resource[3], avancement[3], "/", objectif[3], "---", resource[4], avancement[4], "/", objectif[4], "---", file=out_file)
 
