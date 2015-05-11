@@ -15,6 +15,7 @@ glimpsePA = []
 scoutPA = []
 landPA = []
 exploitPA =[]
+transformtPA =[]
 stopPA = []
 
 tabAction = []
@@ -53,6 +54,8 @@ for info in json_dict:
 				landPA.append(info["data"]["cost"])
 			elif tabAction[-1] == "exploit":
 				exploitPA.append(info["data"]["cost"])
+			elif tabAction[-1] == "transform":
+				transformtPA.append(info["data"]["cost"])
 			elif tabAction[-1] == "stop":
 				stopPA.append(info["data"]["cost"])
 
@@ -61,23 +64,18 @@ tabCount = {k: tabAction.count(k) for k in set(tabAction)}
 
 for action in tabCount.keys():
 	if action == "move_to":
-		print(action , tabCount[action] , "| cost =" , sum(move_toPA, 0), "| ecartType =" , ecartype(move_toPA), file=out_file)
+		print(action , tabCount[action] , "\t| cost =" , sum(move_toPA, 0), "| ecartType =" , ecartype(move_toPA), file=out_file)
 	if action == "explore":
-		print(action , tabCount[action] , "| cost =" , sum(explorePA, 0), "| ecartType =" , ecartype(explorePA)  , file=out_file)
+		print(action , tabCount[action] , "\t| cost =" , sum(explorePA, 0), "| ecartType =" , ecartype(explorePA)  , file=out_file)
 	if action == "glimpse":
-		print(action , tabCount[action] , "| cost =" , sum(glimpsePA, 0), "| ecartType =" , ecartype(glimpsePA)  , file=out_file)
+		print(action , tabCount[action] , "\t| cost =" , sum(glimpsePA, 0), "| ecartType =" , ecartype(glimpsePA)  , file=out_file)
 	if action == "scout":
 		print(action , tabCount[action] , "\t| cost =" , sum(scoutPA, 0), " | ecartType =" , ecartype(scoutPA)  , file=out_file)
 	if action == "land":
 		print(action , tabCount[action] , "\t\t| cost =" , sum(landPA, 0), "  | ecartType =" , ecartype(landPA)  , file=out_file)
 	if action == "exploit":
-		print(action , tabCount[action] , "| cost =" , sum(exploitPA, 0), "| ecartType =" , ecartype(exploitPA)  , file=out_file)
+		print(action , tabCount[action] , "\t| cost =" , sum(exploitPA, 0), "| ecartType =" , ecartype(exploitPA)  , file=out_file)
+	if action == "transform":
+		print(action , tabCount[action] , "\t| cost =" , sum(transformtPA, 0), "| ecartType =" , ecartype(transformtPA)  , file=out_file)
 	if action == "stop":
 		print(action , tabCount[action] , "\t\t| cost =" , sum(stopPA, 0), "  | ecartType =" , ecartype(stopPA)  , file=out_file)
-
-
-
-
-
-
-		
